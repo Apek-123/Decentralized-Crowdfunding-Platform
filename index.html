@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web3 Campaign</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+</head>
+<body>
+    <h1>Web3 Campaign</h1>
+
+    <!-- Inputs for creating a campaign -->
+    <h2>Create Campaign</h2>
+    <input type="text" id="title" placeholder="Title" required>
+    <input type="text" id="description" placeholder="Description" required>
+    <input type="number" id="goal" placeholder="Goal (in ETH)" required>
+    <button onclick="createCampaign()">Create Campaign</button>
+
+    <hr>
+
+    <!-- Inputs for contributing to a campaign -->
+    <h2>Contribute to Campaign</h2>
+    <input type="number" id="campaignId" placeholder="Campaign ID" required>
+    <input type="number" id="contributionAmount" placeholder="Amount to Contribute (in ETH)" required>
+    <button onclick="contributeToCampaign()">Contribute</button>
+
+    <hr>
+
+    <!-- Display Campaign Details -->
+    <h2>Campaign Details</h2>
+    <div id="campaign-details">
+        <p><strong>Title: </strong><span id="campaign-title"></span></p>
+        <p><strong>Description: </strong><span id="campaign-description"></span></p>
+        <p><strong>Goal: </strong><span id="campaign-goal"></span></p>
+        <p><strong>Funds Raised: </strong><span id="campaign-funds-raised"></span></p>
+    </div>
+
+    <script>
+        let web3;
+        let contract;
+
+        // Check if MetaMask is installed
+        if (window.ethereum) {
+            web3 = new Web3(window.ethereum);
+            window.ethereum.request({ method: 'eth_requestAccounts' }).then(accounts => {
+                console.log("MetaMask account connected:", accounts[0]);
+            }).catch(error => {
+                alert("Please connect to MetaMask.");
+            });
+        } else {
+            alert("Please install MetaMask to use this application.");
+        }
+
+        // Replace with your contract's address and ABI
+        const contractAddress = "0x4c030c40c8984A73a24B400441fBB3A6CDeF19a0";  // Use the deployed contract address
+        const abi = [ /* ABI from the compiled contract */ ];
+        contract = new web3.eth.Contract(abi, contractAddress);
+
+        // Create a new campaign
+        async function createCampaign() {
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const goal = document.getElementById('goal').value;
+            const accounts = await web3.eth.getAccounts();
+
+            try {
+                await contract.methods.createCampaign(title, description, web3.utils.toWei(goal, 'ether'))
+                    .send({ from: accounts[0] });
+                alert("Campaign Created Successfully!");
+            } catch (error) {
+                console.error("Error creating campaign:", error);
+                alert("Failed to create campaign.");
+            }
+        }
+
+        // Contribute to an existing campaign
+        async function contributeToCampaign() {
+            const campaignId = document.getElementById('campaignId').value;
+            const amount = document.getElementById('contributionAmount').value;
+            const accounts = await web3.eth.getAccounts();
+
+            try {
+                await contract.methods.contribute(campaignId).send({
+                    from: accounts[0],
+                    value: web3.utils.toWei(amount, 'ether')
+                });
+                alert("Contribution successful!");
+            } catch (error) {
+                console.error("Error contributing to campaign:", error);
+                alert("Failed to contribute.");
+            }
+        }
+
+        // Display campaign details
+        async function displayCampaignDetails(campaignId) {
+            try {
+                const campaign = await contract.methods.getCampaign(campaignId).call();
+                document.getElementById('campaign-title').innerText = campaign.title;
+                document.getElementById('campaign-description').innerText = campaign.description;
+                document.getElementById('campaign-goal').innerText = web3.utils.fromWei(campaign.goal, 'ether');
+                document.getElementById('campaign-funds-raised').innerText = web3.utils.fromWei(campaign.fundsRaised, 'ether');
+            } catch (error) {
+                console.error("Error fetching campaign details:", error);
+                alert("Failed to fetch campaign details.");
+            }
+        }
+    </script>
+</body>
+</html>
