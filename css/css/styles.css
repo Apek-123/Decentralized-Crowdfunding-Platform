@@ -1,0 +1,83 @@
+body {
+    background-image: url('WhatsApp Image 2024-12-07 at 10.25.59 AM.jpeg');
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-position: left;
+    background-color: #4a6e92;
+    font-family: Arial, sans-serif;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 30vh;
+    flex-direction: column;
+}
+
+
+h1 {
+    margin-top: 0; 
+    color: #000000; 
+    text-align: center;
+    background-color: rgba(249, 245, 245, 0.6); /* Semi-transparent black background */
+    padding: 10px 20px; /* Add padding inside the box */
+    border-radius: 10px; /* Rounded corners */
+    display: inline-block; /* Adjust box size to content */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.container {
+    width: 90%;
+    max-width: 600px;
+    text-align: center; 
+}
+
+#campaign-form {
+    margin-top: 20px; 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff; 
+}
+
+#campaign-list h2 {
+    background-color: rgb(255, 255, 255);
+    color: #000000;
+    padding: 10px 20px; 
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: 0 2px 10px rgb(255, 255, 255);
+}
+
+#campaigns {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 15px;
+    }
+    
+
+.btn-primary {
+    background-color: #ffea00; 
+    border-color: #ef9709;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; 
+    border-color: #0056b3;
+}
+
+.list-group-item {
+    background-color: #f8f9fa; 
+    border: 1px solid #dee2e6; 
+}
+
+.list-group-item:hover {
+    background-color: #e2e6ea; 
+}
+
+.form-control {
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 1.5rem; 
+}
